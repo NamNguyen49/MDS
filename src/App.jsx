@@ -121,7 +121,7 @@ function App() {
                 {/* Welcome Banner */}
                 <div className="dashboard-banner" style={{position:'relative', overflow:'hidden'}}>
                   <div style={{position:'relative', zIndex: 2}}>
-                    <h1 className="m3-display-medium" style={{fontWeight: 800, letterSpacing:'-1px'}}>Design System OS</h1>
+                    <h1 className="m3-display-medium" style={{fontWeight: 800, letterSpacing:'-1px'}}> MRD Design System </h1>
                     <p className="m3-body-large" style={{opacity: 0.95, marginTop: '8px', maxWidth:'600px'}}>Your Material 3 library is growing. All 18 core components are verified and ready for production deployment.</p>
                     <div style={{marginTop: '32px', display:'flex', gap:'16px'}}>
                       <Button variant="elevated" style={{background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(10px)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', padding:'0 24px'}}>
