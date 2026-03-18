@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-const NavigationRail = ({ items, activeId, onChange, fab, className = '' }) => {
+const NavigationRail = ({ items, activeId, onChange, fab, className = "" }) => {
   return (
     <nav className={`m3-navigation-rail ${className}`}>
       {fab && <div className="rail-fab-container">{fab}</div>}
-      
+
       <div className="rail-items">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <button
-            key={item.id}
-            className={`rail-item ${activeId === item.id ? 'active' : ''}`}
+            key={item.id || index}
+            className={`rail-item ${activeId === item.id ? "active" : ""}`}
             onClick={() => onChange(item.id)}
           >
             <div className="rail-icon-container">

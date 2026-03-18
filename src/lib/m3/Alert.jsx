@@ -24,11 +24,8 @@ const Alert = ({
         <div className="m3-body-medium">{children}</div>
       </div>
       {onClose && (
-        <button 
-          onClick={onClose}
-          style={{background:'none', border:'none', padding:0, cursor:'pointer', color:'inherit'}}
-        >
-          <span className="material-symbols-rounded" style={{fontSize: '20px'}}>close</span>
+        <button className="m3-alert-close" onClick={onClose}>
+          <span className="material-symbols-rounded" style={{ fontSize: '20px' }}>close</span>
         </button>
       )}
     </div>
