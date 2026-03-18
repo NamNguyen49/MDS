@@ -38,6 +38,27 @@ import Avatar from "./lib/m3/Avatar";
 import Select from "./lib/m3/Select";
 import IconPicker from "./lib/m3/IconPicker";
 import Table from "./lib/m3/Table";
+import Typography from "./lib/m3/Typography";
+import Flex from "./lib/m3/Flex";
+import Space from "./lib/m3/Space";
+import Grid from "./lib/m3/Grid";
+import Layout from "./lib/m3/Layout";
+import Breadcrumb from "./lib/m3/Breadcrumb";
+import Dropdown from "./lib/m3/Dropdown";
+import Steps from "./lib/m3/Steps";
+import Spin from "./lib/m3/Spin";
+import Result from "./lib/m3/Result";
+import Popconfirm from "./lib/m3/Popconfirm";
+import DatePicker from "./lib/m3/DatePicker";
+import Calendar from "./lib/m3/Calendar";
+import ColorPicker from "./lib/m3/ColorPicker";
+import Rate from "./lib/m3/Rate";
+import InputNumber from "./lib/m3/InputNumber";
+import Timeline from "./lib/m3/Timeline";
+import Descriptions from "./lib/m3/Descriptions";
+import Watermark from "./lib/m3/Watermark";
+import Statistic from "./lib/m3/Statistic";
+import Affix from "./lib/m3/Affix";
 import "./index.css";
 import AnimatedLayout from "./components/ui/AnimatedLayout";
 
@@ -733,6 +754,157 @@ const ComponentPreview = ({ id }) => {
           ></div>
         </div>
       );
+    case "breadcrumbs_steps":
+      return (
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <span
+            className="material-symbols-rounded"
+            style={{
+              fontSize: "24px",
+              color: "var(--md-sys-color-primary)",
+              opacity: 0.8,
+            }}
+          >
+            linear_scale
+          </span>
+          <span
+            className="material-symbols-rounded"
+            style={{
+              fontSize: "24px",
+              color: "var(--md-sys-color-secondary)",
+              opacity: 0.8,
+            }}
+          >
+            more_horiz
+          </span>
+        </div>
+      );
+    case "dropdown":
+      return (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "2px",
+            alignItems: "center",
+            border: "1px solid var(--md-sys-color-outline-variant)",
+            padding: "4px",
+            borderRadius: "4px",
+          }}
+        >
+          <div
+            style={{
+              width: "24px",
+              height: "4px",
+              background: "var(--md-sys-color-primary)",
+              opacity: 0.8,
+              borderRadius: "2px",
+            }}
+          ></div>
+          <div
+            style={{
+              width: "24px",
+              height: "4px",
+              background: "var(--md-sys-color-outline-variant)",
+              borderRadius: "2px",
+            }}
+          ></div>
+          <div
+            style={{
+              width: "24px",
+              height: "4px",
+              background: "var(--md-sys-color-outline-variant)",
+              borderRadius: "2px",
+            }}
+          ></div>
+        </div>
+      );
+    case "date_calendars":
+      return (
+        <span
+          className="material-symbols-rounded"
+          style={{
+            fontSize: "40px",
+            color: "var(--md-sys-color-primary)",
+            opacity: 0.5,
+          }}
+        >
+          calendar_month
+        </span>
+      );
+    case "rate_color":
+      return (
+        <div style={{ display: "flex", gap: "4px" }}>
+          <span
+            className="material-symbols-rounded"
+            style={{ fontSize: "24px", color: "#fadb14" }}
+          >
+            star
+          </span>
+          <span
+            className="material-symbols-rounded"
+            style={{
+              fontSize: "24px",
+              color: "var(--md-sys-color-error)",
+              opacity: 0.8,
+            }}
+          >
+            palette
+          </span>
+        </div>
+      );
+    case "timeline":
+      return (
+        <span
+          className="material-symbols-rounded"
+          style={{
+            fontSize: "40px",
+            color: "var(--md-sys-color-primary)",
+            opacity: 0.5,
+          }}
+        >
+          timeline
+        </span>
+      );
+    case "descriptions":
+      return (
+        <span
+          className="material-symbols-rounded"
+          style={{
+            fontSize: "40px",
+            color: "var(--md-sys-color-primary)",
+            opacity: 0.5,
+          }}
+        >
+          view_list
+        </span>
+      );
+    case "feedback_adv":
+      return (
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <span
+            className="material-symbols-rounded"
+            style={{
+              fontSize: "24px",
+              color: "var(--md-sys-color-primary)",
+              opacity: 0.8,
+              animation: "spin 1s linear infinite",
+            }}
+          >
+            sync
+          </span>
+          <span
+            className="material-symbols-rounded"
+            style={{
+              fontSize: "24px",
+              color: "var(--md-sys-color-error)",
+              opacity: 0.8,
+            }}
+          >
+            info
+          </span>
+        </div>
+      );
     default:
       return (
         <div
@@ -814,23 +986,23 @@ function App() {
     { id: "icons", label: "Icon Library", icon: "face" },
     { type: "header", label: "Components" },
     { id: "buttons", label: "Buttons & FAB", icon: "smart_button" },
-    { id: "textfields", label: "Inputs & Search", icon: "edit_square" },
+    { id: "textfields", label: "Inputs, Search & Rate", icon: "edit_square" },
     { id: "selection", label: "Selection", icon: "check_box" },
-    { id: "pickers", label: "Pickers", icon: "ads_click" },
-    { id: "navigation", label: "Navigation", icon: "navigation" },
+    { id: "pickers", label: "Pickers & Calendars", icon: "ads_click" },
+    { id: "navigation", label: "Navigation & Steps", icon: "navigation" },
     { id: "chips", label: "Chips & Badges", icon: "label" },
-    { id: "cards", label: "Cards & Lists", icon: "view_agenda" },
-    { id: "alerts", label: "Alerts & Banners", icon: "warning" },
+    { id: "cards", label: "Cards & Descriptions", icon: "view_agenda" },
+    { id: "alerts", label: "Alerts & Timeline", icon: "warning" },
     { id: "tables", label: "Data Tables", icon: "table_rows" },
     { id: "pagination", label: "Pagination", icon: "last_page" },
-    { id: "feedback", label: "Feedback", icon: "sync" },
-    { id: "dialogs", label: "Dialogs & Snack", icon: "chat_bubble" },
+    { id: "feedback", label: "Feedback & Spin", icon: "sync" },
+    { id: "dialogs", label: "Dialogs & Confirm", icon: "chat_bubble" },
   ];
 
   // Project Metrics (Calculated)
-  const TOTAL_COMPONENTS = 37; // Total files in src/lib/m3
+  const TOTAL_COMPONENTS = 58; // Total files in src/lib/m3
   const TOTAL_TOKENS = 373; // --md-sys-color- variables in index.css
-  const CORE_SIZE_KB = "51.3"; // index.css size
+  const CORE_SIZE_KB = "58.5"; // index.css size
   const CORE_ICONS = [
     "home",
     "search",
@@ -1171,12 +1343,12 @@ function App() {
                         ],
                       },
                       {
-                        title: "Layout",
+                        title: "Navigation & Steps",
                         items: [
                           {
                             id: "navigation",
                             label: "Navigation",
-                            desc: "Drawer, Rail & Tabs",
+                            desc: "Drawer, Rail, Tabs, Steps, Breadcrumbs & Dropdown",
                           },
                           {
                             id: "pagination",
@@ -1186,7 +1358,7 @@ function App() {
                         ],
                       },
                       {
-                        title: "Input",
+                        title: "Input & Entry",
                         items: [
                           {
                             id: "buttons",
@@ -1195,8 +1367,8 @@ function App() {
                           },
                           {
                             id: "textfields",
-                            label: "Inputs & Search",
-                            desc: "Trường nhập dữ liệu",
+                            label: "Inputs, Search & Rate",
+                            desc: "Trường nhập dữ liệu, Đánh giá sao, Input Numeric",
                           },
                           {
                             id: "selection",
@@ -1205,18 +1377,18 @@ function App() {
                           },
                           {
                             id: "pickers",
-                            label: "Pickers",
-                            desc: "Date, Time, Icon Pickers",
+                            label: "Pickers & Calendars",
+                            desc: "Date, Time, Icon, Calendar, Color Pickers",
                           },
                         ],
                       },
                       {
-                        title: "Data",
+                        title: "Data & Displays",
                         items: [
                           {
                             id: "cards",
-                            label: "Cards & Lists",
-                            desc: "Hiển thị nội dung khối",
+                            label: "Cards & Descriptions",
+                            desc: "Hiển thị khối dữ liệu, Bảng mô tả",
                           },
                           {
                             id: "chips",
@@ -1231,22 +1403,22 @@ function App() {
                         ],
                       },
                       {
-                        title: "Feedback",
+                        title: "Feedback & Overlay",
                         items: [
                           {
                             id: "alerts",
-                            label: "Alerts & Banners",
-                            desc: "Cảnh báo & thông tin",
+                            label: "Alerts & Timeline",
+                            desc: "Cảnh báo, thông tin, Dòng thời gian",
                           },
                           {
                             id: "dialogs",
-                            label: "Dialogs & Snack",
-                            desc: "Cửa sổ & Thông báo",
+                            label: "Dialogs & Confirm",
+                            desc: "Cửa sổ, Thông báo, Xác nhận",
                           },
                           {
                             id: "feedback",
-                            label: "Progress & State",
-                            desc: "Tiến trình & Trạng thái",
+                            label: "Progress & Spinners",
+                            desc: "Tiến trình, Vòng xoay Loading",
                           },
                         ],
                       },
@@ -2165,6 +2337,28 @@ function App() {
   onChange={setVal} 
 />`}
                       />
+                      <ExampleCard
+                        title="Numeric Input (InputNumber)"
+                        description="Nhập dữ liệu số với khả năng tăng/giảm qua nút phụ."
+                        component={
+                          <div style={{ width: "100%", maxWidth: "300px", padding: "16px", background: "var(--md-sys-color-surface-container-low)" }}>
+                            <InputNumber min={0} max={100} defaultValue={10} />
+                          </div>
+                        }
+                        code={`<InputNumber min={0} max={100} defaultValue={10} />`}
+                      />
+
+                      <ExampleCard
+                        title="Rating (Đánh giá Sao)"
+                        description="Trường dữ liệu cho phép người dùng đánh giá điểm bằng các icon."
+                        component={
+                          <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
+                            <Rate defaultValue={4} />
+                            <Rate defaultValue={3} allowHalf color="error" />
+                          </div>
+                        }
+                        code={`<Rate defaultValue={4} />\n<Rate allowHalf color="error" />`}
+                      />
                     </div>
                   </div>
                 </div>
@@ -2345,6 +2539,28 @@ function App() {
   onChange={setValue} 
 />`}
                   />
+                  <Showcase
+                    title="Color Picker"
+                    component={
+                      <div style={{ width: "100%", maxWidth: "400px" }}>
+                        <ColorPicker defaultValue="#6750A4" label="Brand Color" />
+                      </div>
+                    }
+                    code={`<ColorPicker defaultValue="#6750A4" label="Brand Color" />`}
+                  />
+                  
+                  <Showcase
+                    title="Date Picker & Advanced Calendar"
+                    component={
+                      <div style={{ display: "flex", gap: "24px", flexDirection: "column", width: "100%", maxWidth: "400px" }}>
+                        <DatePicker label="Chọn ngày sinh" placeholder="DD/MM/YYYY" />
+                        <Card variant="outlined">
+                          <Calendar />
+                        </Card>
+                      </div>
+                    }
+                    code={`<DatePicker label="Select Date" />\n<Calendar />`}
+                  />
                 </div>
               )}
 
@@ -2521,6 +2737,38 @@ function App() {
                           </div>
                         }
                         code={`<NavigationRail items={items} activeId={id} onChange={setId} />`}
+                      />
+                      <ExampleCard
+                        title="Steps"
+                        description="Trình tự các bước thực hiện một quy trình phức tạp đa phần."
+                        component={
+                          <div style={{ padding: "16px", background: "var(--md-sys-color-surface-container)", borderRadius: "12px", width: "100%" }}>
+                            <Steps current={1} items={[{ title: "Đăng ký" }, { title: "Xác nhận ID" }, { title: "Hoàn tất" }]} />
+                          </div>
+                        }
+                        code={`<Steps current={1} items={[{...}]} />`}
+                      />
+
+                      <ExampleCard
+                        title="Breadcrumbs"
+                        description="Hiển thị hệ thống phân cấp vị trí hiện tại trong trang Web."
+                        component={
+                          <Breadcrumb items={[{ title: "Home" }, { title: "App Components" }, { title: "Navigation" }]} />
+                        }
+                        code={`<Breadcrumb items={[{ title: "Home" }, ...]} />`}
+                      />
+
+                      <ExampleCard
+                        title="Dropdown (Floating Menu)"
+                        description="Lựa chọn tùy chọn từ menu nổi."
+                        component={
+                          <div style={{ padding: "40px" }}>
+                            <Dropdown overlay={<Menu items={[{ label: "Tùy chọn số 1" }, { label: "Hành động phụ" }, { label: "Gỡ lỗi", icon: "error" }]} />}>
+                              <Button>Nhấp vào Menu ▼</Button>
+                            </Dropdown>
+                          </div>
+                        }
+                        code={`<Dropdown overlay={<Menu items={...} />}>\n  <Button>Menu ▼</Button>\n</Dropdown>`}
                       />
                     </div>
                   </div>
@@ -2782,6 +3030,35 @@ function App() {
                         }
                         code={`<EmptyState icon="folder_off" title="..." />`}
                       />
+                      <ExampleCard
+                        title="Timeline"
+                        description="Lịch sử các sự kiện sắp xếp theo chiều dọc hoặc hiển thị dòng chảy hoạt động."
+                        component={
+                          <div style={{ padding: "16px", background: "var(--md-sys-color-surface-container)", borderRadius: "12px", width: "100%" }}>
+                            <Timeline items={[{ children: "Tạo dự án lúc 9:00", color: "primary" }, { children: "Kết nối Database", color: "success" }, { children: "Lỗi kết nối Server", color: "error" }, { children: "Hoàn tất Deploy" }]} />
+                          </div>
+                        }
+                        code={`<Timeline items={...} />`}
+                      />
+
+                      <ExampleCard
+                        title="Descriptions & Statistics"
+                        description="Trình bày các số liệu và thông số chi tiết dưới dạng bảng hoặc số khổng lồ."
+                        component={
+                          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                            <div style={{ border: "1px solid var(--md-sys-color-outline-variant)", padding: "16px", borderRadius: "12px" }}>
+                              <Statistic title="Active Users (Tháng này)" value={45129} precision={0} suffix="người dùng" />
+                            </div>
+                            <Descriptions title="User Profile">
+                              <Descriptions.Item label="Name">Jonathan Lee</Descriptions.Item>
+                              <Descriptions.Item label="Role">Developer</Descriptions.Item>
+                              <Descriptions.Item label="Location">San Francisco</Descriptions.Item>
+                              <Descriptions.Item label="Email">john@mds.design</Descriptions.Item>
+                            </Descriptions>
+                          </div>
+                        }
+                        code={`<Statistic title="Users" value={45129} />\n<Descriptions title="Profile">...</Descriptions>`}
+                      />
                     </div>
                   </div>
                 </div>
@@ -2970,6 +3247,42 @@ function App() {
                           </div>
                         }
                         code={`<ProgressBar value={${progress}} />`}
+                      />
+                      <ExampleCard
+                        title="Spin & Loaders"
+                        description="Hiệu ứng tải chờ (Spinner)."
+                        component={
+                          <div style={{ display: "flex", gap: "32px", alignItems: "center", padding: "16px", background: "var(--md-sys-color-surface-container)", borderRadius: "12px" }}>
+                            <Spin />
+                            <Spin size="large" />
+                            <Spin>
+                              <div style={{ width: 100, height: 40, border: "2px dashed var(--md-sys-color-outline)" }}></div>
+                            </Spin>
+                          </div>
+                        }
+                        code={`<Spin />\n<Spin size="large" />\n<Spin><View/></Spin>`}
+                      />
+
+                      <ExampleCard
+                        title="Result State"
+                        description="Phản hồi tổng quan về kết quả của một hoạt động."
+                        component={
+                          <Result status="success" title="Purchase Complete" subTitle="Your order #48593 is verified." />
+                        }
+                        code={`<Result status="success" title="..." subTitle="..." />`}
+                      />
+
+                      <ExampleCard
+                        title="Popconfirm"
+                        description="Xác nhận rủi ro trước khi thực hiện hành động."
+                        component={
+                          <div style={{ padding: "40px" }}>
+                            <Popconfirm title="Xóa dự án này?" description="Hành động này không thể hoàn tác.">
+                              <Button color="error" variant="filled">Xóa Dự Án</Button>
+                            </Popconfirm>
+                          </div>
+                        }
+                        code={`<Popconfirm title="Bạn có chắc?" description="...">\n  <Button>Delete</Button>\n</Popconfirm>`}
                       />
                     </div>
                   </div>

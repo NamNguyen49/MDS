@@ -1,0 +1,368 @@
+/* Timeline */
+.m3-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.m3-timeline-item {
+  position: relative;
+  margin: 0;
+  padding-bottom: 20px;
+  font-size: 14px;
+}
+.m3-timeline-item:last-child {
+  padding-bottom: 0;
+}
+.m3-timeline-item-tail {
+  position: absolute;
+  top: 10px;
+  left: 4px;
+  height: calc(100% - 10px);
+  border-left: 2px solid var(--md-sys-color-surface-variant);
+}
+.m3-timeline-item:last-child .m3-timeline-item-tail {
+  display: none;
+}
+.m3-timeline-item-head {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: var(--md-sys-color-primary);
+  border-radius: 50%;
+  border: 2px solid var(--md-sys-color-primary);
+}
+.m3-timeline-item-content {
+  position: relative;
+  top: -4px;
+  margin: 0 0 0 24px;
+  word-break: break-word;
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Base Popover for Popconfirm / ColorPicker / etc */
+.m3-popover {
+  position: absolute;
+  z-index: 1030;
+  display: block;
+  font-size: 14px;
+  word-wrap: break-word;
+  background-color: var(--md-sys-color-surface-container-high);
+  background-clip: padding-box;
+  border-radius: 8px;
+  box-shadow:
+    0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+.m3-popover-inner {
+  padding: 12px 16px;
+}
+
+/* Popconfirm */
+.m3-popconfirm-message {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  color: var(--md-sys-color-on-surface);
+}
+.m3-popconfirm-message-icon {
+  margin-right: 8px;
+  color: var(--md-sys-color-error);
+  font-size: 18px;
+}
+.m3-popconfirm-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.m3-popconfirm-buttons button {
+  padding: 4px 8px;
+  font-size: 12px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+.m3-popconfirm-cancel {
+  background: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.m3-popconfirm-ok {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+/* ColorPicker */
+.m3-color-picker-trigger {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--md-sys-color-outline);
+  cursor: pointer;
+  display: inline-flex;
+  padding: 4px;
+}
+.m3-color-picker-color-block {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+/* Calendar */
+.m3-calendar {
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--md-sys-color-surface);
+}
+.m3-calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
+}
+.m3-calendar-body {
+  width: 100%;
+  border-collapse: collapse;
+}
+.m3-calendar-body th {
+  padding: 8px 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: 400;
+  font-size: 14px;
+}
+.m3-calendar-body td {
+  padding: 4px;
+  text-align: center;
+}
+.m3-calendar-date {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  margin: 0 auto;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: var(--md-sys-color-on-surface);
+}
+.m3-calendar-date:hover {
+  background-color: var(--md-sys-color-surface-variant);
+}
+.m3-calendar-date-today {
+  border: 1px solid var(--md-sys-color-primary);
+  color: var(--md-sys-color-primary);
+}
+.m3-calendar-date-selected {
+  background-color: var(--md-sys-color-primary) !important;
+  color: var(--md-sys-color-on-primary) !important;
+}
+
+/* DatePicker */
+.m3-datepicker {
+  position: relative;
+  display: inline-block;
+}
+.m3-datepicker-input {
+  display: flex;
+  align-items: center;
+  padding: 4px 11px;
+  width: 100%;
+  height: 32px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--md-sys-color-on-surface);
+  background-color: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: 6px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.m3-datepicker-input:hover {
+  border-color: var(--md-sys-color-primary);
+}
+.m3-datepicker-input input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+}
+.m3-datepicker-icon {
+  color: var(--md-sys-color-on-surface-variant);
+  margin-left: 4px;
+  font-size: 16px;
+}
+.m3-datepicker-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1050;
+  margin-top: 4px;
+  box-shadow:
+    0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  background-color: var(--md-sys-color-surface);
+}
+
+/* Rate */
+.m3-rate {
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--md-sys-color-outline-variant);
+}
+.m3-rate-star {
+  margin: 0;
+  padding: 0;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.m3-rate-star:hover {
+  transform: scale(1.1);
+}
+.m3-rate-star-full .material-symbols-rounded {
+  font-variation-settings: "FILL" 1;
+  color: #fadb14;
+}
+.m3-rate-star-half .material-symbols-rounded {
+  font-variation-settings: "FILL" 1;
+  color: #fadb14;
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
+}
+.m3-rate-star-zero .material-symbols-rounded {
+  font-variation-settings: "FILL" 0;
+  color: var(--md-sys-color-outline-variant);
+}
+
+/* Watermark */
+.m3-watermark {
+  position: relative;
+  overflow: hidden;
+}
+.m3-watermark-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 9;
+  background-repeat: repeat;
+}
+
+/* Descriptions */
+.m3-descriptions {
+  display: flex;
+  flex-direction: column;
+}
+.m3-descriptions-title {
+  margin-bottom: 20px;
+  color: var(--md-sys-color-on-surface);
+  font-weight: 500;
+  font-size: 16px;
+}
+.m3-descriptions-view {
+  width: 100%;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.m3-descriptions-view table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+.m3-descriptions-item-label {
+  color: var(--md-sys-color-on-surface-variant);
+  background-color: var(--md-sys-color-surface-container);
+  padding: 16px 24px;
+  font-weight: normal;
+  border-right: 1px solid var(--md-sys-color-outline-variant);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  width: 25%;
+}
+.m3-descriptions-item-content {
+  color: var(--md-sys-color-on-surface);
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  border-right: 1px solid var(--md-sys-color-outline-variant);
+}
+.m3-descriptions-item-label:last-child {
+  border-right: none;
+}
+.m3-descriptions-item-content:last-child {
+  border-right: none;
+}
+
+/* InputNumber */
+.m3-input-number {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: 6px;
+  background-color: var(--md-sys-color-surface-container);
+  transition: all 0.2s;
+}
+.m3-input-number:hover {
+  border-color: var(--md-sys-color-primary);
+}
+.m3-input-number-input-wrap {
+  flex: 1;
+  overflow: hidden;
+}
+.m3-input-number-input {
+  width: 100%;
+  height: 30px;
+  padding: 0 11px;
+  text-align: left;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--md-sys-color-on-surface);
+}
+.m3-input-number-handler-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 22px;
+  height: 100%;
+  background: var(--md-sys-color-surface-container-high);
+  border-left: 1px solid var(--md-sys-color-outline);
+  border-radius: 0 6px 6px 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.m3-input-number:hover .m3-input-number-handler-wrap {
+  opacity: 1;
+}
+.m3-input-number-handler {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.m3-input-number-handler:hover {
+  color: var(--md-sys-color-primary);
+  background: var(--md-sys-color-surface-variant);
+}
+.m3-input-number-handler-up {
+  border-bottom: 1px solid var(--md-sys-color-outline);
+  border-radius: 0 6px 0 0;
+}
+.m3-input-number-handler-down {
+  border-radius: 0 0 6px 0;
+}
+.m3-input-number-handler .material-symbols-rounded {
+  font-size: 14px;
+}
