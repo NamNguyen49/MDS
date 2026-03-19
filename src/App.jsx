@@ -58,8 +58,10 @@ import Timeline from "./lib/m3/Timeline";
 import Descriptions from "./lib/m3/Descriptions";
 import Watermark from "./lib/m3/Watermark";
 import Statistic from "./lib/m3/Statistic";
-import Affix from "./lib/m3/Affix";
-import "./index.css";
+
+import Stack from "./lib/m3/Stack";
+import Masonry from "./lib/m3/Masonry";
+import { BentoGrid, BentoCard } from "./lib/m3/Bento";
 import AnimatedLayout from "./components/ui/AnimatedLayout";
 
 const ComponentPreview = ({ id }) => {
@@ -905,6 +907,59 @@ const ComponentPreview = ({ id }) => {
           </span>
         </div>
       );
+    case "layout":
+      return (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "4px",
+            width: "100px",
+          }}
+        >
+          <div
+            style={{
+              background: "var(--md-sys-color-primary)",
+              height: "20px",
+              opacity: 0.2,
+            }}
+          ></div>
+          <div
+            style={{
+              background: "var(--md-sys-color-primary)",
+              height: "20px",
+              opacity: 0.2,
+            }}
+          ></div>
+          <div
+            style={{
+              background: "var(--md-sys-color-primary)",
+              height: "20px",
+              opacity: 0.2,
+            }}
+          ></div>
+          <div
+            style={{
+              background: "var(--md-sys-color-primary)",
+              height: "20px",
+              opacity: 0.2,
+            }}
+          ></div>
+        </div>
+      );
+    case "media":
+      return (
+        <span
+          className="material-symbols-rounded"
+          style={{
+            fontSize: "40px",
+            color: "var(--md-sys-color-primary)",
+            opacity: 0.5,
+          }}
+        >
+          image
+        </span>
+      );
     default:
       return (
         <div
@@ -930,7 +985,9 @@ const ComponentPreview = ({ id }) => {
 };
 
 function App() {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState(
+    localStorage.getItem("mds-active-tab") || "overview",
+  );
   const [theme, setTheme] = useState(
     localStorage.getItem("mds-theme") || "light",
   );
@@ -943,6 +1000,7 @@ function App() {
   const [activeTabId, setActiveTabId] = useState("tab1");
   const [selectedSegment, setSelectedSegment] = useState("day");
   const [snackOpen, setSnackOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [navActiveId, setNavActiveId] = useState("home");
   const [searchText, setSearchText] = useState("");
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -968,6 +1026,11 @@ function App() {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("mds-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("mds-active-tab", activeTab);
+    window.scrollTo(0, 0);
+  }, [activeTab]);
 
   useEffect(() => {
     const timer = setInterval(
@@ -997,10 +1060,14 @@ function App() {
     { id: "pagination", label: "Pagination", icon: "last_page" },
     { id: "feedback", label: "Feedback & Spin", icon: "sync" },
     { id: "dialogs", label: "Dialogs & Confirm", icon: "chat_bubble" },
+    { id: "media", label: "Carousel & Media", icon: "image" },
+    { id: "layout", label: "Layout & Spacing", icon: "grid_view" },
   ];
 
   // Project Metrics (Calculated)
-  const TOTAL_COMPONENTS = 58; // Total files in src/lib/m3
+  const TOTAL_COMPONENTS = 61;
+
+  // Total files in src/lib/m3
   const TOTAL_TOKENS = 373; // --md-sys-color- variables in index.css
   const CORE_SIZE_KB = "58.5"; // index.css size
   const CORE_ICONS = [
@@ -1211,13 +1278,32 @@ function App() {
           }
           items={menuItems}
           activeId={activeTab}
-          onChange={setActiveTab}
+          onChange={(id) => {
+            setActiveTab(id);
+            setIsDrawerOpen(false);
+          }}
+          className={isDrawerOpen ? "open" : ""}
         />
+
+        {isDrawerOpen && (
+          <div
+            className="m3-drawer-overlay"
+            onClick={() => setIsDrawerOpen(false)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.5)",
+              zIndex: 2500,
+              backdropFilter: "blur(4px)",
+            }}
+          />
+        )}
 
         <div className="main-content-wrapper">
           <TopAppBar
             title="Component Showcase"
             leadingIcon="menu"
+            onLeadingClick={() => setIsDrawerOpen(!isDrawerOpen)}
             trailingIcons={[
               {
                 icon: theme === "light" ? "dark_mode" : "light_mode",
@@ -1418,7 +1504,22 @@ function App() {
                           {
                             id: "feedback",
                             label: "Progress & Spinners",
-                            desc: "Tiến trình, Vòng xoay Loading",
+                            desc: "Tiến trình, Vòng xoay Loading, Skeleton & Tooltip",
+                          },
+                        ],
+                      },
+                      {
+                        title: "Others & Utilities",
+                        items: [
+                          {
+                            id: "media",
+                            label: "Carousel & Media",
+                            desc: "Trình hình ảnh, Hiệu ứng bo góc",
+                          },
+                          {
+                            id: "layout",
+                            label: "Layout & Utilities",
+                            desc: "Grid, Flex, Space & Layout Components",
                           },
                         ],
                       },
@@ -1607,7 +1708,43 @@ function App() {
                             </Button>
                           </div>
                         }
-                        code={`<Button color="secondary" variant="filled">Secondary</Button>`}
+                        code={`<Button color="secondary" variant="filled">Secondary</Button>\n<Button color="tertiary" variant="filled">Tertiary</Button>`}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="doc-section examples-section">
+                    <h2 className="doc-section-title">Watermark</h2>
+                    <div className="examples-container">
+                      <ExampleCard
+                        title="Watermark"
+                        description="Chèn dấu mờ bảo mật cho nội dung trang web."
+                        component={
+                          <div
+                            style={{
+                              width: "100%",
+                              height: "200px",
+                              border:
+                                "1px solid var(--md-sys-color-outline-variant)",
+                              borderRadius: "12px",
+                              position: "relative",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <Watermark content="MDS DESIGN" opacity={0.1}>
+                              <div style={{ padding: "24px" }}>
+                                <h3 className="m3-title-medium">
+                                  Confidential Document
+                                </h3>
+                                <p className="m3-body-small">
+                                  Nội dung này được bảo vệ bởi hệ thống
+                                  Watermark.
+                                </p>
+                              </div>
+                            </Watermark>
+                          </div>
+                        }
+                        code={`<Watermark content="MDS DESIGN">...</Watermark>`}
                       />
                     </div>
                   </div>
@@ -2341,7 +2478,15 @@ function App() {
                         title="Numeric Input (InputNumber)"
                         description="Nhập dữ liệu số với khả năng tăng/giảm qua nút phụ."
                         component={
-                          <div style={{ width: "100%", maxWidth: "300px", padding: "16px", background: "var(--md-sys-color-surface-container-low)" }}>
+                          <div
+                            style={{
+                              width: "100%",
+                              maxWidth: "300px",
+                              padding: "16px",
+                              background:
+                                "var(--md-sys-color-surface-container-low)",
+                            }}
+                          >
                             <InputNumber min={0} max={100} defaultValue={10} />
                           </div>
                         }
@@ -2352,7 +2497,13 @@ function App() {
                         title="Rating (Đánh giá Sao)"
                         description="Trường dữ liệu cho phép người dùng đánh giá điểm bằng các icon."
                         component={
-                          <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "24px",
+                              alignItems: "center",
+                            }}
+                          >
                             <Rate defaultValue={4} />
                             <Rate defaultValue={3} allowHalf color="error" />
                           </div>
@@ -2543,17 +2694,31 @@ function App() {
                     title="Color Picker"
                     component={
                       <div style={{ width: "100%", maxWidth: "400px" }}>
-                        <ColorPicker defaultValue="#6750A4" label="Brand Color" />
+                        <ColorPicker
+                          defaultValue="#6750A4"
+                          label="Brand Color"
+                        />
                       </div>
                     }
                     code={`<ColorPicker defaultValue="#6750A4" label="Brand Color" />`}
                   />
-                  
+
                   <Showcase
                     title="Date Picker & Advanced Calendar"
                     component={
-                      <div style={{ display: "flex", gap: "24px", flexDirection: "column", width: "100%", maxWidth: "400px" }}>
-                        <DatePicker label="Chọn ngày sinh" placeholder="DD/MM/YYYY" />
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "24px",
+                          flexDirection: "column",
+                          width: "100%",
+                          maxWidth: "400px",
+                        }}
+                      >
+                        <DatePicker
+                          label="Chọn ngày sinh"
+                          placeholder="DD/MM/YYYY"
+                        />
                         <Card variant="outlined">
                           <Calendar />
                         </Card>
@@ -2736,26 +2901,47 @@ function App() {
                             </div>
                           </div>
                         }
-                        code={`<NavigationRail items={items} activeId={id} onChange={setId} />`}
+                        code={`<NavigationRail items={items} activeId={id} onChange={setRailActiveId} />`}
                       />
                       <ExampleCard
                         title="Steps"
                         description="Trình tự các bước thực hiện một quy trình phức tạp đa phần."
                         component={
-                          <div style={{ padding: "16px", background: "var(--md-sys-color-surface-container)", borderRadius: "12px", width: "100%" }}>
-                            <Steps current={1} items={[{ title: "Đăng ký" }, { title: "Xác nhận ID" }, { title: "Hoàn tất" }]} />
+                          <div
+                            style={{
+                              padding: "16px",
+                              background:
+                                "var(--md-sys-color-surface-container)",
+                              borderRadius: "12px",
+                              width: "100%",
+                            }}
+                          >
+                            <Steps current={1}>
+                              <Steps.Step title="Đăng ký" />
+                              <Steps.Step
+                                title="Xác nhận ID"
+                                description="Xác minh danh tính qua CCCD."
+                              />
+                              <Steps.Step title="Hoàn tất" />
+                            </Steps>
                           </div>
                         }
-                        code={`<Steps current={1} items={[{...}]} />`}
+                        code={`<Steps current={1}>\n  <Steps.Step title="Step 1" />\n  <Steps.Step title="Step 2" />\n</Steps>`}
                       />
 
                       <ExampleCard
                         title="Breadcrumbs"
                         description="Hiển thị hệ thống phân cấp vị trí hiện tại trong trang Web."
                         component={
-                          <Breadcrumb items={[{ title: "Home" }, { title: "App Components" }, { title: "Navigation" }]} />
+                          <Breadcrumb>
+                            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+                            <Breadcrumb.Item href="#">
+                              App Components
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item>Navigation</Breadcrumb.Item>
+                          </Breadcrumb>
                         }
-                        code={`<Breadcrumb items={[{ title: "Home" }, ...]} />`}
+                        code={`<Breadcrumb>\n  <Breadcrumb.Item>Home</Breadcrumb.Item>\n  <Breadcrumb.Item>App</Breadcrumb.Item>\n</Breadcrumb>`}
                       />
 
                       <ExampleCard
@@ -2763,12 +2949,64 @@ function App() {
                         description="Lựa chọn tùy chọn từ menu nổi."
                         component={
                           <div style={{ padding: "40px" }}>
-                            <Dropdown overlay={<Menu items={[{ label: "Tùy chọn số 1" }, { label: "Hành động phụ" }, { label: "Gỡ lỗi", icon: "error" }]} />}>
+                            <Dropdown
+                              overlay={
+                                <Menu
+                                  items={[
+                                    { label: "Tùy chọn số 1" },
+                                    { label: "Hành động phụ" },
+                                    { label: "Gỡ lỗi", icon: "error" },
+                                  ]}
+                                />
+                              }
+                            >
                               <Button>Nhấp vào Menu ▼</Button>
                             </Dropdown>
                           </div>
                         }
                         code={`<Dropdown overlay={<Menu items={...} />}>\n  <Button>Menu ▼</Button>\n</Dropdown>`}
+                      />
+
+                      <ExampleCard
+                        title="Navigation Drawer & TopAppBar"
+                        description="Các thành phần cấu trúc điều hướng chính của ứng dụng."
+                        component={
+                          <div
+                            style={{
+                              height: "300px",
+                              border:
+                                "1px solid var(--md-sys-color-outline-variant)",
+                              borderRadius: "12px",
+                              overflow: "hidden",
+                              position: "relative",
+                            }}
+                          >
+                            <TopAppBar title="Page Title" leadingIcon="menu" />
+                            <div
+                              style={{
+                                display: "flex",
+                                height: "100%",
+                                paddingTop: "64px",
+                              }}
+                            >
+                              <NavigationDrawer
+                                items={[
+                                  { id: "h", label: "Home", icon: "home" },
+                                ]}
+                                activeId="h"
+                                style={{
+                                  position: "relative",
+                                  height: "100%",
+                                  width: "160px",
+                                }}
+                              />
+                              <div style={{ padding: "20px" }}>
+                                Main Content
+                              </div>
+                            </div>
+                          </div>
+                        }
+                        code={`<TopAppBar title="Title" />\n<NavigationDrawer items={items} />`}
                       />
                     </div>
                   </div>
@@ -2986,26 +3224,6 @@ function App() {
                       />
 
                       <ExampleCard
-                        title="Accordion"
-                        description="Tổ chức nội dung phân cấp, ẩn bớt thông tin chi tiết."
-                        component={
-                          <Accordion
-                            items={[
-                              {
-                                title: "Technical Details",
-                                content: "React, M3, Framer Motion.",
-                              },
-                              {
-                                title: "Usage Guide",
-                                content: "Import and use components directly.",
-                              },
-                            ]}
-                          />
-                        }
-                        code={`<Accordion items={[{title:'Header', content:'Body'}]} />`}
-                      />
-
-                      <ExampleCard
                         title="Empty States"
                         description="Hiển thị khi không có dữ liệu để hướng dẫn người dùng."
                         component={
@@ -3030,30 +3248,47 @@ function App() {
                         }
                         code={`<EmptyState icon="folder_off" title="..." />`}
                       />
-                      <ExampleCard
-                        title="Timeline"
-                        description="Lịch sử các sự kiện sắp xếp theo chiều dọc hoặc hiển thị dòng chảy hoạt động."
-                        component={
-                          <div style={{ padding: "16px", background: "var(--md-sys-color-surface-container)", borderRadius: "12px", width: "100%" }}>
-                            <Timeline items={[{ children: "Tạo dự án lúc 9:00", color: "primary" }, { children: "Kết nối Database", color: "success" }, { children: "Lỗi kết nối Server", color: "error" }, { children: "Hoàn tất Deploy" }]} />
-                          </div>
-                        }
-                        code={`<Timeline items={...} />`}
-                      />
+
 
                       <ExampleCard
                         title="Descriptions & Statistics"
                         description="Trình bày các số liệu và thông số chi tiết dưới dạng bảng hoặc số khổng lồ."
                         component={
-                          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                            <div style={{ border: "1px solid var(--md-sys-color-outline-variant)", padding: "16px", borderRadius: "12px" }}>
-                              <Statistic title="Active Users (Tháng này)" value={45129} precision={0} suffix="người dùng" />
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "24px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                border:
+                                  "1px solid var(--md-sys-color-outline-variant)",
+                                padding: "16px",
+                                borderRadius: "12px",
+                              }}
+                            >
+                              <Statistic
+                                title="Active Users (Tháng này)"
+                                value={45129}
+                                precision={0}
+                                suffix="người dùng"
+                              />
                             </div>
                             <Descriptions title="User Profile">
-                              <Descriptions.Item label="Name">Jonathan Lee</Descriptions.Item>
-                              <Descriptions.Item label="Role">Developer</Descriptions.Item>
-                              <Descriptions.Item label="Location">San Francisco</Descriptions.Item>
-                              <Descriptions.Item label="Email">john@mds.design</Descriptions.Item>
+                              <Descriptions.Item label="Name">
+                                Jonathan Lee
+                              </Descriptions.Item>
+                              <Descriptions.Item label="Role">
+                                Developer
+                              </Descriptions.Item>
+                              <Descriptions.Item label="Location">
+                                San Francisco
+                              </Descriptions.Item>
+                              <Descriptions.Item label="Email">
+                                john@mds.design
+                              </Descriptions.Item>
                             </Descriptions>
                           </div>
                         }
@@ -3252,11 +3487,28 @@ function App() {
                         title="Spin & Loaders"
                         description="Hiệu ứng tải chờ (Spinner)."
                         component={
-                          <div style={{ display: "flex", gap: "32px", alignItems: "center", padding: "16px", background: "var(--md-sys-color-surface-container)", borderRadius: "12px" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "32px",
+                              alignItems: "center",
+                              padding: "16px",
+                              background:
+                                "var(--md-sys-color-surface-container)",
+                              borderRadius: "12px",
+                            }}
+                          >
                             <Spin />
                             <Spin size="large" />
                             <Spin>
-                              <div style={{ width: 100, height: 40, border: "2px dashed var(--md-sys-color-outline)" }}></div>
+                              <div
+                                style={{
+                                  width: 100,
+                                  height: 40,
+                                  border:
+                                    "2px dashed var(--md-sys-color-outline)",
+                                }}
+                              ></div>
                             </Spin>
                           </div>
                         }
@@ -3267,7 +3519,11 @@ function App() {
                         title="Result State"
                         description="Phản hồi tổng quan về kết quả của một hoạt động."
                         component={
-                          <Result status="success" title="Purchase Complete" subTitle="Your order #48593 is verified." />
+                          <Result
+                            status="success"
+                            title="Purchase Complete"
+                            subTitle="Your order #48593 is verified."
+                          />
                         }
                         code={`<Result status="success" title="..." subTitle="..." />`}
                       />
@@ -3277,12 +3533,55 @@ function App() {
                         description="Xác nhận rủi ro trước khi thực hiện hành động."
                         component={
                           <div style={{ padding: "40px" }}>
-                            <Popconfirm title="Xóa dự án này?" description="Hành động này không thể hoàn tác.">
-                              <Button color="error" variant="filled">Xóa Dự Án</Button>
+                            <Popconfirm
+                              title="Xóa dự án này?"
+                              description="Hành động này không thể hoàn tác."
+                            >
+                              <Button color="error" variant="filled">
+                                Xóa Dự Án
+                              </Button>
                             </Popconfirm>
                           </div>
                         }
                         code={`<Popconfirm title="Bạn có chắc?" description="...">\n  <Button>Delete</Button>\n</Popconfirm>`}
+                      />
+                      <ExampleCard
+                        title="Skeleton"
+                        description="Hiển thị khung sườn trong khi chờ dữ liệu tải xuống."
+                        component={
+                          <div
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "12px",
+                            }}
+                          >
+                            <Skeleton
+                              style={{ width: "40%", height: "24px" }}
+                            />
+                            <Skeleton
+                              style={{ width: "100%", height: "16px" }}
+                            />
+                            <Skeleton
+                              style={{ width: "80%", height: "16px" }}
+                            />
+                          </div>
+                        }
+                        code={`<Skeleton />`}
+                      />
+
+                      <ExampleCard
+                        title="Tooltip"
+                        description="Hiển thị chú thích ngắn gọn khi rê chuột qua phần tử."
+                        component={
+                          <div style={{ padding: "20px" }}>
+                            <Tooltip title="Đây là thông tin bổ sung">
+                              <Button variant="outlined">Hover Me</Button>
+                            </Tooltip>
+                          </div>
+                        }
+                        code={`<Tooltip title="...">...</Tooltip>`}
                       />
                     </div>
                   </div>
@@ -3383,7 +3682,7 @@ function App() {
               {activeTab === "alerts" && (
                 <div className="component-doc-page">
                   <div className="doc-section hero-section">
-                    <h1 className="m3-display-small">Alerts & Banners</h1>
+                    <h1 className="m3-display-small">Alerts & Timeline</h1>
                     <p className="m3-body-large doc-intro">
                       Cung cấp các thông điệp quan trọng về trạng thái hệ thống
                       hoặc kết quả hành động của người dùng.
@@ -3466,6 +3765,135 @@ function App() {
                         }
                         code={`<Alert variant="warning" title="..." />`}
                       />
+                      <ExampleCard
+                        title="Timeline with Icons"
+                        description="Sử dụng các biểu tượng để định nghĩa trạng thái của sự kiện."
+                        component={
+                          <div
+                            style={{
+                              padding: "24px",
+                              background:
+                                "var(--md-sys-color-surface-container)",
+                              borderRadius: "16px",
+                              width: "100%",
+                            }}
+                          >
+                            <Timeline
+                              items={[
+                                {
+                                  children: "Giao dịch thành công",
+                                  icon: "check_circle",
+                                  color: "var(--md-sys-color-primary)",
+                                },
+                                {
+                                  children: "Đang xử lý đơn hàng",
+                                  icon: "sync",
+                                  color: "var(--md-sys-color-secondary)",
+                                },
+                                {
+                                  children: "Lỗi thanh toán",
+                                  icon: "error",
+                                  color: "var(--md-sys-color-error)",
+                                },
+                                {
+                                  children: "Giao hàng",
+                                  icon: "local_shipping",
+                                },
+                              ]}
+                            />
+                          </div>
+                        }
+                        code={`<Timeline items={[{ children: 'Done', icon: 'check' }, ...]} />`}
+                      />
+
+                      <ExampleCard
+                        title="Alternate Timeline"
+                        description="Bố cục xen kẽ giữa hai bên để tiết kiệm diện tích và tăng tính thẩm mỹ."
+                        component={
+                          <div
+                            style={{
+                              padding: "24px",
+                              background:
+                                "var(--md-sys-color-surface-container-low)",
+                              borderRadius: "16px",
+                              width: "100%",
+                            }}
+                          >
+                            <Timeline
+                              mode="alternate"
+                              dashed
+                              items={[
+                                {
+                                  label: "09:00",
+                                  children: "Họp giao ban đầu sáng",
+                                  color: "var(--md-sys-color-primary)",
+                                },
+                                {
+                                  label: "10:30",
+                                  children: "Review thiết kế UI/UX mới",
+                                  color: "var(--md-sys-color-secondary)",
+                                },
+                                {
+                                  label: "14:00",
+                                  children: "Phát triển tính năng Timeline",
+                                  color: "var(--md-sys-color-tertiary)",
+                                },
+                                {
+                                  label: "16:30",
+                                  children: "Nghiệm thu dự án",
+                                },
+                              ]}
+                            />
+                          </div>
+                        }
+                        code={`<Timeline mode="alternate" dashed items={...} />`}
+                      />
+
+                      <ExampleCard
+                        title="Labels & Custom Dots"
+                        description="Thêm nhãn thời gian và tùy chỉnh hoàn toàn điểm nhấn."
+                        component={
+                          <div
+                            style={{
+                              padding: "24px",
+                              background:
+                                "var(--md-sys-color-surface-container-high)",
+                              borderRadius: "16px",
+                              width: "100%",
+                            }}
+                          >
+                            <Timeline className="has-labels">
+                              <Timeline.Item
+                                label="Bước 1"
+                                dot={
+                                  <div
+                                    style={{
+                                      width: 12,
+                                      height: 12,
+                                      borderRadius: "50%",
+                                      background: "var(--md-sys-color-primary)",
+                                    }}
+                                  />
+                                }
+                              >
+                                Khởi tạo dự án
+                              </Timeline.Item>
+                              <Timeline.Item
+                                label="Bước 2"
+                                children="Thiết kế Database"
+                              />
+                              <Timeline.Item
+                                label="Bước 3"
+                                icon="code"
+                                color="var(--md-sys-color-success)"
+                              >
+                                Coding & Testing
+                              </Timeline.Item>
+                            </Timeline>
+                          </div>
+                        }
+                        code={`<Timeline.Item label="Time" dot={<div ... />} />`}
+                      />
                     </div>
                   </div>
                 </div>
@@ -3528,6 +3956,288 @@ function App() {
                         code={`<Pagination totalPages={10} currentPage={page} onPageChange={setPage} />`}
                       />
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "layout" && (
+                <div className="component-doc-page">
+                  <div className="doc-section hero-section">
+                    <h1 className="m3-display-small">Layout & Spacing</h1>
+                    <p className="m3-body-large doc-intro">
+                      Các thành phần cấu trúc giúp sắp xếp giao diện, quản lý
+                      khoảng cách và hệ thống lưới (Grid).
+                    </p>
+                  </div>
+
+                  <div className="doc-section examples-section">
+                    <h2 className="doc-section-title">Examples</h2>
+
+                    <ExampleCard
+                      title="Stack (Sắp xếp 1 chiều)"
+                      description="Tự động quản lý khoảng cách giữa các phần tử theo hàng dọc hoặc ngang."
+                      component={
+                        <Stack spacing={2}>
+                          <div
+                            style={{
+                              background:
+                                "var(--md-sys-color-primary-container)",
+                              padding: "16px",
+                              borderRadius: "8px",
+                            }}
+                          >
+                            Mục 1
+                          </div>
+                          <Stack direction="row" spacing={1}>
+                            <Button variant="tonal">Hành động A</Button>
+                            <Button variant="tonal">Hành động B</Button>
+                          </Stack>
+                          <div
+                            style={{
+                              background:
+                                "var(--md-sys-color-secondary-container)",
+                              padding: "16px",
+                              borderRadius: "8px",
+                            }}
+                          >
+                            Mục 3
+                          </div>
+                        </Stack>
+                      }
+                      code={`<Stack spacing={2}>\n  <div />\n  <Stack direction="row" spacing={1}>\n    <Button />\n  </Stack>\n</Stack>`}
+                    />
+
+                    <ExampleCard
+                      title="Grid (12 Cột - MUI Style)"
+                      description="Hệ thống lưới linh hoạt tối ưu cho bố cục phức tạp."
+                      component={
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} md={8}>
+                            <div
+                              style={{
+                                background:
+                                  "var(--md-sys-color-surface-container-high)",
+                                padding: "20px",
+                                borderRadius: "12px",
+                                textAlign: "center",
+                              }}
+                            >
+                              Vùng Chính (xs=12, md=8)
+                            </div>
+                          </Grid>
+                          <Grid item xs={12} md={4}>
+                            <div
+                              style={{
+                                background:
+                                  "var(--md-sys-color-surface-container-low)",
+                                padding: "20px",
+                                borderRadius: "12px",
+                                textAlign: "center",
+                              }}
+                            >
+                              Thanh Bên (md=4)
+                            </div>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <div
+                              style={{
+                                background:
+                                  "var(--md-sys-color-tertiary-container)",
+                                padding: "10px",
+                                borderRadius: "8px",
+                                textAlign: "center",
+                              }}
+                            >
+                              xs=6
+                            </div>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <div
+                              style={{
+                                background:
+                                  "var(--md-sys-color-tertiary-container)",
+                                padding: "10px",
+                                borderRadius: "8px",
+                                textAlign: "center",
+                              }}
+                            >
+                              xs=6
+                            </div>
+                          </Grid>
+                        </Grid>
+                      }
+                      code={`<Grid container spacing={2}>\n  <Grid item xs={8}>Main</Grid>\n  <Grid item xs={4}>Side</Grid>\n</Grid>`}
+                    />
+
+                    <ExampleCard
+                      title="Flex & Space (Legacy)"
+                      description="Tự động quản lý khoảng cách giữa các phần tử con (Cách cũ)."
+                      component={
+                        <Space
+                          direction="vertical"
+                          size="large"
+                          style={{ width: "100%" }}
+                        >
+                          <Flex
+                            justify="space-between"
+                            align="center"
+                            style={{
+                              background:
+                                "var(--md-sys-color-surface-container)",
+                              padding: "12px",
+                              borderRadius: "8px",
+                            }}
+                          >
+                            <span>Flex Item 1</span>
+                            <Button size="small">Action</Button>
+                          </Flex>
+                        </Space>
+                      }
+                      code={`<Flex justify="space-between">...</Flex>`}
+                    />
+
+                    <ExampleCard
+                      title="Bento Grid"
+                      description="Sắp xếp các khối nội dung với kích thước đa dạng khít sát nhau."
+                      component={
+                        <BentoGrid columns={4} rows="100px" gap={12}>
+                          <BentoCard colSpan={2} rowSpan={2}>
+                            <div
+                              style={{
+                                background:
+                                  "var(--md-sys-color-primary-container)",
+                                height: "100%",
+                                borderRadius: "16px",
+                                padding: "16px",
+                                color:
+                                  "var(--md-sys-color-on-primary-container)",
+                              }}
+                            >
+                              Large Bento (2x2)
+                            </div>
+                          </BentoCard>
+                          <BentoCard colSpan={2} rowSpan={1}>
+                            <div
+                              style={{
+                                background:
+                                  "var(--md-sys-color-secondary-container)",
+                                height: "100%",
+                                borderRadius: "16px",
+                                padding: "16px",
+                              }}
+                            >
+                              Wide Bento (2x1)
+                            </div>
+                          </BentoCard>
+                          <BentoCard colSpan={1} rowSpan={1}>
+                            <div
+                              style={{
+                                background:
+                                  "var(--md-sys-color-tertiary-container)",
+                                height: "100%",
+                                borderRadius: "16px",
+                                padding: "16px",
+                              }}
+                            >
+                              1x1
+                            </div>
+                          </BentoCard>
+                          <BentoCard colSpan={1} rowSpan={1}>
+                            <div
+                              style={{
+                                background:
+                                  "var(--md-sys-color-surface-container-high)",
+                                height: "100%",
+                                borderRadius: "16px",
+                                padding: "16px",
+                              }}
+                            >
+                              1x1
+                            </div>
+                          </BentoCard>
+                        </BentoGrid>
+                      }
+                      code={`<BentoGrid columns={4}>\n  <BentoCard colSpan={2} rowSpan={2} />\n</BentoGrid>`}
+                    />
+
+                    <ExampleCard
+                      title="Masonry Layout (Pinterest Style)"
+                      description="Dàn trang so le vượt qua giới hạn của hệ thống lưới thông thường."
+                      component={
+                        <Masonry cols={3} gap={12}>
+                          {[160, 240, 180, 280, 150, 220].map((height, i) => (
+                            <Card
+                              key={i}
+                              style={{
+                                height: `${height}px`,
+                                background:
+                                  "var(--md-sys-color-surface-container-low)",
+                                padding: "12px",
+                              }}
+                            >
+                              <h4 className="m3-title-small">Item {i + 1}</h4>
+                              <p className="m3-body-small">
+                                Masonry card height: {height}px
+                              </p>
+                            </Card>
+                          ))}
+                        </Masonry>
+                      }
+                      code={`<Masonry cols={3} gap={12}>\n  <Card />\n</Masonry>`}
+                    />
+
+                    <ExampleCard
+                      title="Full Layout"
+                      description="Cấu trúc trang tiêu chuẩn với Header, Sider, Content và Footer."
+                      component={
+                        <div
+                          style={{
+                            height: "300px",
+                            border:
+                              "1px solid var(--md-sys-color-outline-variant)",
+                            borderRadius: "12px",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <Layout style={{ height: "100%" }}>
+                            <Layout.Header
+                              style={{
+                                background:
+                                  "var(--md-sys-color-primary-container)",
+                                height: "48px",
+                              }}
+                            >
+                              Header
+                            </Layout.Header>
+                            <Layout hasSider>
+                              <Layout.Sider
+                                style={{
+                                  background:
+                                    "var(--md-sys-color-surface-container-low)",
+                                }}
+                                width={100}
+                              >
+                                Sider
+                              </Layout.Sider>
+                              <Layout.Content style={{ padding: "16px" }}>
+                                Content Area
+                              </Layout.Content>
+                            </Layout>
+                            <Layout.Footer
+                              style={{
+                                background:
+                                  "var(--md-sys-color-surface-container-high)",
+                                textAlign: "center",
+                                padding: "8px",
+                              }}
+                            >
+                              Footer ©2024
+                            </Layout.Footer>
+                          </Layout>
+                        </div>
+                      }
+                      code={`<Layout>\n  <Header/>\n  <Layout hasSider>\n    <Sider/>\n    <Content/>\n  </Layout>\n  <Footer/>\n</Layout>`}
+                    />
                   </div>
                 </div>
               )}

@@ -5,12 +5,12 @@ import IconButton from './IconButton';
  * Material 3 Top App Bar
  * Fixed version: Does NOT wrap React elements in buttons to avoid nested button errors.
  */
-const TopAppBar = ({ title, leadingIcon, trailingIcons, variant = 'center', className = '' }) => {
+const TopAppBar = ({ title, leadingIcon, onLeadingClick, trailingIcons, variant = 'center', className = '' }) => {
   return (
     <header className={`m3-top-app-bar m3-top-app-bar-${variant} ${className}`}>
       <div className="top-app-bar-container">
         {leadingIcon && (
-          <IconButton icon={leadingIcon} />
+          <IconButton icon={leadingIcon} onClick={onLeadingClick} />
         )}
         
         <div className="top-app-bar-title">

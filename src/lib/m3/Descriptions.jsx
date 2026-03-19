@@ -2,33 +2,20 @@ import React from 'react';
 
 const Descriptions = ({ title, column = 3, children, className = '', style, ...props }) => {
   const items = React.Children.toArray(children);
-  const rows = [];
-  
-  for (let i = 0; i < items.length; i += column) {
-    const rowItems = items.slice(i, i + column);
-    rows.push(
-      <tr key={i}>
-        {rowItems.map((item, idx) => (
-          <React.Fragment key={idx}>
-            <th className="m3-descriptions-item-label">{item.props.label}</th>
-            <td className="m3-descriptions-item-content" colSpan={item.props.span || 1}>
-              {item.props.children}
-            </td>
-          </React.Fragment>
-        ))}
-      </tr>
-    );
-  }
 
   return (
     <div className={`m3-descriptions ${className}`} style={style} {...props}>
       {title && <div className="m3-descriptions-title">{title}</div>}
-      <div className="m3-descriptions-view">
-        <table>
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
+      <div 
+        className="m3-descriptions-view"
+        style={{ '--m3-descriptions-column': column }}
+      >
+        {items.map((item, idx) => (
+          <div key={idx} className="m3-descriptions-item" style={{ gridColumn: `span ${item.props.span || 1}` }}>
+            <div className="m3-descriptions-item-label">{item.props.label}</div>
+            <div className="m3-descriptions-item-content">{item.props.children}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

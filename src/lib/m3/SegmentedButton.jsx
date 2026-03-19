@@ -7,18 +7,28 @@ const SegmentedButton = ({
   className = '' 
 }) => {
   return (
-    <div className={`m3-segmented-btn ${className}`}>
-      {options.map((option) => (
-        <button
-          key={option.id}
-          className={`m3-segmented-item ${selectedId === option.id ? 'selected' : ''}`}
-          onClick={() => onChange(option.id)}
-        >
-          <span className="state-layer"></span>
-          {selectedId === option.id && <span className="material-symbols-rounded">check</span>}
-          <span>{option.label}</span>
-        </button>
-      ))}
+    <div className={`m3-segmented-btn ${className}`} role="radiogroup">
+      {options.map((option) => {
+        const isSelected = selectedId === option.id;
+        return (
+          <button
+            key={option.id}
+            role="radio"
+            aria-checked={isSelected}
+            className={`m3-segmented-item ${isSelected ? 'selected' : ''}`}
+            onClick={() => onChange(option.id)}
+            tabIndex={isSelected ? 0 : -1}
+          >
+            <span className="state-layer"></span>
+            {isSelected && (
+              <span className="material-symbols-rounded" aria-hidden="true">
+                check
+              </span>
+            )}
+            <span>{option.label}</span>
+          </button>
+        );
+      })}
     </div>
   );
 };

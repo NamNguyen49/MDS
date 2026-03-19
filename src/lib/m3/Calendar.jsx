@@ -64,25 +64,122 @@ const Calendar = ({ value, onChange, className = '', style, ...props }) => {
     return rows;
   };
 
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const [view, setView] = useState('days'); // 'days', 'months', 'years'
+  const [yearPage, setYearPage] = useState(year);
+
+  const fullMonthNames = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
+  const shortMonthNames = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+  
+  // Create 12 years for the current page
+  const startYear = Math.floor(yearPage / 12) * 12;
+  const yearsList = Array.from({ length: 12 }, (_, i) => startYear + i);
+
+  const handleYearChange = (y) => {
+    setCurrentDate(new Date(y, month, 1));
+    setView('days');
+    setYearPage(y);
+  };
+
+  const handleMonthChange = (m) => {
+    setCurrentDate(new Date(year, m, 1));
+    setView('days');
+  };
+
+  const handleHeaderPrev = () => {
+    if (view === 'days') prevMonth();
+    else if (view === 'years') setYearPage(yearPage - 12);
+  };
+
+  const handleHeaderNext = () => {
+    if (view === 'days') nextMonth();
+    else if (view === 'years') setYearPage(yearPage + 12);
+  };
 
   return (
     <div className={`m3-calendar ${className}`} style={style} {...props}>
       <div className="m3-calendar-header">
-        <button className="material-symbols-rounded m3-btn-icon" onClick={prevMonth} style={{border: 'none', background:'none', cursor:'pointer'}}>chevron_left</button>
-        <div>{monthNames[month]} {year}</div>
-        <button className="material-symbols-rounded m3-btn-icon" onClick={nextMonth} style={{border: 'none', background:'none', cursor:'pointer'}}>chevron_right</button>
+        <div className="m3-calendar-title-area">
+          <div 
+            className={`m3-calendar-chip ${view === 'months' ? 'active' : ''}`}
+            onClick={() => setView(view === 'months' ? 'days' : 'months')}
+          >
+            {fullMonthNames[month]}
+          </div>
+          <div 
+            className={`m3-calendar-chip ${view === 'years' ? 'active' : ''}`}
+            onClick={() => {
+              setView(view === 'years' ? 'days' : 'years');
+              setYearPage(year);
+            }}
+          >
+            {year}
+          </div>
+        </div>
+        <div className="m3-calendar-controls">
+          <button className="m3-btn-icon-small" onClick={handleHeaderPrev} title="Previous">
+            <span className="material-symbols-rounded">chevron_left</span>
+          </button>
+          <button className="m3-btn-icon-small" onClick={handleHeaderNext} title="Next">
+            <span className="material-symbols-rounded">chevron_right</span>
+          </button>
+        </div>
       </div>
-      <table className="m3-calendar-body">
-        <thead>
-          <tr>
-             <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
-          </tr>
-        </thead>
-        <tbody>
-          {renderCells()}
-        </tbody>
-      </table>
+
+      <div className="m3-calendar-content-wrapper">
+        {view === 'days' && (
+          <table className="m3-calendar-body">
+            <thead>
+              <tr>
+                 <th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th>
+              </tr>
+            </thead>
+            <tbody>
+              {renderCells()}
+            </tbody>
+          </table>
+        )}
+
+        {view === 'months' && (
+          <div className="m3-calendar-grid-view">
+            {shortMonthNames.map((name, i) => (
+              <div 
+                key={name} 
+                className={`m3-calendar-grid-item ${month === i ? 'selected' : ''}`}
+                onClick={() => handleMonthChange(i)}
+              >
+                {name}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {view === 'years' && (
+          <div className="m3-calendar-grid-view">
+            {yearsList.map(y => (
+              <div 
+                key={y} 
+                className={`m3-calendar-grid-item ${year === y ? 'selected' : ''}`}
+                onClick={() => handleYearChange(y)}
+              >
+                {y}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="m3-calendar-footer">
+        <button 
+          className="m3-btn-text-small" 
+          onClick={() => {
+            setCurrentDate(new Date());
+            setView('days');
+            setYearPage(new Date().getFullYear());
+          }}
+        >
+          Hôm nay
+        </button>
+      </div>
     </div>
   );
 };

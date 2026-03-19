@@ -6,6 +6,8 @@ const Button = ({
   color = 'primary',   
   className = '',
   icon,
+  'aria-label': ariaLabel,
+  disabled,
   ...props 
 }) => {
   const variants = {
@@ -17,14 +19,19 @@ const Button = ({
   };
 
   const colorClass = color !== 'primary' ? `m3-btn-${color}` : '';
+  const finalAriaLabel = ariaLabel || (icon && !children ? icon : undefined);
 
   return (
     <button 
       className={`m3-btn ${variants[variant]} ${colorClass} ${className}`}
+      disabled={disabled}
+      aria-disabled={disabled}
+      aria-label={finalAriaLabel}
+      tabIndex={disabled ? -1 : 0}
       {...props}
     >
       <span className="state-layer"></span>
-      {icon && <span className="material-symbols-rounded">{icon}</span>}
+      {icon && <span className="material-symbols-rounded" aria-hidden="true">{icon}</span>}
       {children}
     </button>
   );

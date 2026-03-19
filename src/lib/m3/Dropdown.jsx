@@ -48,8 +48,9 @@ const Dropdown = ({ overlay, children, trigger = ['hover'], className = '', styl
       </div>
       <div className={`m3-dropdown-menu`}>
         {React.cloneElement(overlay, { 
-          onClick: () => {
-             if(overlay.props.onClick) overlay.props.onClick();
+          isOpen: true,
+          onClick: (e) => {
+             if(overlay.props.onClick) overlay.props.onClick(e);
              setOpen(false);
           }
         })}

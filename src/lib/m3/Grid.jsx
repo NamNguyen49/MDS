@@ -1,57 +1,64 @@
 import React from 'react';
 
-export const Row = ({ children, gutter = 0, align, justify, wrap, className = '', style, ...props }) => {
-  const g = Array.isArray(gutter) ? gutter : [gutter, 0];
-  const customStyle = {
-    ...style,
-    marginLeft: g[0] ? -g[0] / 2 : undefined,
-    marginRight: g[0] ? -g[0] / 2 : undefined,
-    rowGap: g[1] ? `${g[1]}px` : undefined,
-    alignItems: align,
-    justifyContent: justify,
-    flexWrap: wrap === false ? 'nowrap' : 'wrap',
+/**
+ * Grid component inspired by MUI.
+ * Supports a 12-column system with container and item props.
+ */
+const Grid = ({ 
+  children, 
+  container = false, 
+  item = false, 
+  xs, sm, md, lg, xl, 
+  spacing = 2, 
+  columns = 12,
+  alignItems = 'stretch',
+  justifyContent = 'start',
+  direction = 'row',
+  className = '',
+  style = {},
+  ...props 
+}) => {
+  const gutter = typeof spacing === 'number' ? `${spacing * 8}px` : spacing;
+  
+  const getColWidth = (val) => {
+    if (val === true) return 'auto';
+    if (!val) return null;
+    return `${(val / columns) * 100}%`;
   };
 
-  const childrenWithProps = React.Children.map(children, child => {
-    if (React.isValidElement(child)) {
-      return React.cloneElement(child, { gutter: g });
-    }
-    return child;
-  });
+  const gridStyle = {
+    boxSizing: 'border-box',
+    display: container ? 'flex' : 'block',
+    flexWrap: container ? 'wrap' : undefined,
+    flexDirection: container ? direction : undefined,
+    width: container ? `calc(100% + ${gutter})` : undefined,
+    margin: container ? `calc(-${gutter} / 2)` : undefined,
+    padding: item ? `calc(${gutter} / 2)` : undefined,
+    alignItems: container ? (alignItems === 'start' || alignItems === 'end' ? `flex-${alignItems}` : alignItems) : undefined,
+    justifyContent: container ? (justifyContent === 'start' || justifyContent === 'end' ? `flex-${justifyContent}` : justifyContent) : undefined,
+    flexBasis: item ? getColWidth(xs) || 'auto' : undefined,
+    flexGrow: item ? (xs ? 0 : 1) : undefined,
+    flexShrink: item ? 0 : undefined,
+    maxWidth: item ? getColWidth(xs) || '100%' : undefined,
+    ...style
+  };
 
   return (
-    <div className={`m3-row ${className}`} style={customStyle} {...props}>
-      {childrenWithProps}
-    </div>
-  );
-};
-
-export const Col = ({ children, span, offset, flex, gutter, className = '', style, ...props }) => {
-  let customStyle = { ...style };
-  
-  if (gutter && gutter[0]) {
-    customStyle.paddingLeft = gutter[0] / 2;
-    customStyle.paddingRight = gutter[0] / 2;
-  }
-
-  if (span !== undefined) {
-    customStyle.flex = `0 0 ${(span / 24) * 100}%`;
-    customStyle.maxWidth = `${(span / 24) * 100}%`;
-  }
-  
-  if (offset !== undefined) {
-    customStyle.marginLeft = `${(offset / 24) * 100}%`;
-  }
-  
-  if (flex !== undefined) {
-    customStyle.flex = flex;
-  }
-
-  return (
-    <div className={`m3-col ${className}`} style={customStyle} {...props}>
+    <div 
+      className={`m3-grid ${container ? 'm3-grid-container' : 'm3-grid-item'} ${className}`} 
+      style={gridStyle} 
+      {...props}
+    >
       {children}
     </div>
   );
 };
 
-export default { Row, Col };
+// Backwards compatibility for Row/Col if needed
+Grid.Row = (props) => <Grid container {...props} />;
+Grid.Col = (props) => <Grid item {...props} />;
+
+export const Row = Grid.Row;
+export const Col = Grid.Col;
+
+export default Grid;
